@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-type BreakpointName = "xs" | "sm" | "md" | "xl" | "2xl";
+export type BreakpointName = "xs" | "sm" | "md" | "xl" | "2xl";
 
 type Breakpoints = Record<BreakpointName, number>;
 

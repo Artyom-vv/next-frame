@@ -6,21 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="710eadcd-9b48-4f6e-85f6-02c8c6d3ec2c" name="Changes" comment="init">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/icons/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/assets/icons/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/icons/pattern.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/layout/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/layout/Header.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/layout/Section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/layout/Section.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/providers/LenisProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/providers/LenisProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/GreenBanner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ui/GreenBanner.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hooks/usePinnedScroll.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hooks/usePinnedScroll.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hooks/useResponsiveSliderConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hooks/useResponsiveSliderConfig.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hooks/useResponsiveText.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hooks/useResponsiveText.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/reviews/Review.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/reviews/Review.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hooks/useBreakpoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hooks/useBreakpoint.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hooks/useVerticalPinnedScroll.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hooks/useVerticalPinnedScroll.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sections/ProcessSlider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/sections/ProcessSlider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sections/Projects.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/sections/Projects.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sections/Reviews.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/sections/Reviews.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/formatText.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/utils/formatText.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/scrollTo.ts" beforeDir="false" afterPath="$PROJECT_DIR$/utils/scrollTo.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +143,7 @@
       <workItem from="1774178646416" duration="89000" />
       <workItem from="1774178740127" duration="11838000" />
       <workItem from="1774256448847" duration="7467000" />
-      <workItem from="1774279373917" duration="6896000" />
+      <workItem from="1774279373917" duration="9751000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
