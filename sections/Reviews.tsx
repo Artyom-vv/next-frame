@@ -1,47 +1,87 @@
 "use client";
 
-import React, {useEffect, useRef, useState} from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import Section from "@/components/layout/Section";
-import {useVerticalPinnedScroll} from "@/hooks/useVerticalPinnedScroll";
+import { useVerticalPinnedScroll } from "@/hooks/useVerticalPinnedScroll";
 import gsap from "gsap";
 import Review from "@/components/reviews/Review";
-import {reviews} from "@/data/reviews";
-import {useBreakpoint} from "@/hooks/useBreakpoint";
+import { reviews } from "@/data/reviews";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
+const SAFE_TOP_BY_BP = {
+    base: 48,
+    xl: 48,
+    "2xl": 166,
+} as const;
 
 const Reviews = () => {
+    const viewportRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
     const offsetsRef = useRef<number[]>([]);
+    const centeredBaseRef = useRef(0);
+    const currentIndexRef = useRef(0);
+
     const [currentIndex, setCurrentIndex] = useState(0);
-    const {ready: bpReady, breakpoint} = useBreakpoint();
+    const { ready: bpReady, breakpoint } = useBreakpoint();
 
-    // пересчитываем реальные позиции карточек после рендера и при ресайзе
-    useEffect(() => {
+   const getSafeTop = () =>
+    breakpoint === "xl" || breakpoint === "2xl" ? SAFE_TOP_BY_BP[breakpoint] : SAFE_TOP_BY_BP.base;
+
+    const getYForIndex = (index: number) => {
+        if (index <= 0) return getSafeTop();
+
+        const offset = offsetsRef.current[index] ?? 0;
+        return centeredBaseRef.current - offset;
+    };
+
+    useLayoutEffect(() => {
         const measure = () => {
+            const viewport = viewportRef.current;
             const slider = sliderRef.current;
-            if (!slider) return;
+            const firstCard = cardRefs.current[0];
 
-            const firstOffset = cardRefs.current[0]?.offsetTop ?? 0;
+            if (!viewport || !slider || !firstCard) return;
+
+            const firstOffset = firstCard.offsetTop;
+            const safeTop = getSafeTop();
 
             offsetsRef.current = cardRefs.current.map((card) => {
                 if (!card) return 0;
-                // каждая карточка едет к позиции первой
                 return card.offsetTop - firstOffset;
+            });
+
+            const viewportHeight = viewport.clientHeight;
+            const firstCardHeight = firstCard.offsetHeight;
+            const centeredTop = (viewportHeight - firstCardHeight) / 2;
+
+            centeredBaseRef.current = Math.max(safeTop, centeredTop);
+
+            gsap.killTweensOf(slider);
+            gsap.set(slider, {
+                y: getYForIndex(currentIndexRef.current),
             });
         };
 
         measure();
-
         window.addEventListener("resize", measure);
-        return () => window.removeEventListener("resize", measure);
-    }, [breakpoint]); // пересчитываем при смене брейкпоинта
+
+        return () => {
+            window.removeEventListener("resize", measure);
+        };
+    }, [breakpoint]);
 
     const goTo = (next: number) => {
-        setCurrentIndex(next);
-        const offsetY = offsetsRef.current[next] ?? 0;
+        if (next === currentIndexRef.current) return;
 
-        gsap.to(sliderRef.current, {
-            y: -offsetY,
+        currentIndexRef.current = next;
+        setCurrentIndex(next);
+
+        const slider = sliderRef.current;
+        if (!slider) return;
+
+        gsap.killTweensOf(slider);
+        gsap.to(slider, {
+            y: getYForIndex(next),
             duration: 0.6,
             ease: "back.out(0.8)",
             overwrite: "auto",
@@ -63,21 +103,21 @@ const Reviews = () => {
                 id="reviews"
                 className="h-[100vh]"
             >
-                <div className="grow-1 overflow-hidden relative">
-                    <div
-                        className="absolute z-1 top-0 left-0 w-full h-24 bg-[linear-gradient(to_top,rgba(255,255,255,0)_0%,#ffffff_100%)]"/>
-                    <div
-                        className="absolute z-1 bottom-0 left-0 w-full h-24 bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,#ffffff_100%)]"/>
+                <div
+                    ref={viewportRef}
+                    className="grow-1 overflow-hidden relative h-full"
+                >
+                    <div className="absolute z-1 top-0 left-0 w-full h-24 bg-[linear-gradient(to_top,rgba(255,255,255,0)_0%,#ffffff_100%)]" />
+                    <div className="absolute z-1 bottom-0 left-0 w-full h-24 bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,#ffffff_100%)]" />
 
                     <div className="grid-responsive">
-                        <div
-                            className="divider bg-gradation-300 h-[1px] xl:col-start-3 xl:col-span-8 col-span-full relative z-10"/>
+                        <div className="divider bg-gradation-300 h-[1px] xl:col-start-3 xl:col-span-8 col-span-full relative z-10" />
                     </div>
 
-                    <div className="col-span-full grow-1 flex justify-center">
+                    <div className="col-span-full grow-1 flex justify-center h-full">
                         <div
                             ref={sliderRef}
-                            className="flex flex-col self-center xl:pt-[166px] pt-[48px] 2xl:gap-12 gap-8"
+                            className="flex flex-col self-start gap-8 2xl:gap-12 will-change-transform"
                         >
                             {reviews.map((review, i) => (
                                 <div
@@ -89,7 +129,7 @@ const Reviews = () => {
                                     <Review
                                         data={review}
                                         selected={currentIndex === i}
-                                        style={{rotate: review.rotate}}
+                                        style={{ rotate: review.rotate }}
                                     />
                                 </div>
                             ))}
