@@ -76,14 +76,14 @@ const ProcessSlider = () => {
                                     ))}
                                 </SliderTrack>
 
-                                <div className="relative mt-10" style={{height: 220}}>
+                                <div className="relative mt-10 [@media(min-height:800px)]:h-[220px]">
                                     {processSteps.map((step, i) => (
                                         <div
                                             key={step.id}
                                             ref={(el) => {
                                                 if (el) textsRef.current[i] = el;
                                             }}
-                                            className="absolute top-0 left-0 flex gap-10 h-full"
+                                            className="absolute top-0 left-0 flex gap-10 [@media(min-height:800px)]:h-full"
                                             style={{
                                                 width: sizes.active.w,
                                                 opacity: i === 0 ? 1 : 0,
@@ -100,7 +100,7 @@ const ProcessSlider = () => {
                                                     {step.duration}
                                                 </p>
                                             </div>
-                                            <div className="flex flex-col justify-between">
+                                            <div className="flex flex-col justify-between gap-3">
                                                 <div className="flex flex-col gap-4">
                                                     <h3>{step.title}</h3>
                                                     <p className="text-l text-gradation-600">
