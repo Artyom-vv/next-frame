@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 import path from "path";
-import "@/src/lib/env";
+import "@/lib/env";
 
 const nextConfig: NextConfig = {
     turbopack: {
