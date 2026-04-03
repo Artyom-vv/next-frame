@@ -1,12 +1,13 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import {useLayoutEffect, useRef, useState} from "react";
 import Section from "@/components/layout/Section";
-import { useVerticalPinnedScroll } from "@/hooks/useVerticalPinnedScroll";
+import {useVerticalPinnedScroll} from "@/hooks/useVerticalPinnedScroll";
 import gsap from "gsap";
 import Review from "@/components/reviews/Review";
-import { reviews } from "@/data/reviews";
-import { useBreakpoint } from "@/hooks/useBreakpoint";
+import {reviews} from "@/data/reviews";
+import {useBreakpoint} from "@/hooks/useBreakpoint";
+
 const SAFE_TOP_BY_BP = {
     base: 48,
     xl: 48,
@@ -22,10 +23,10 @@ const Reviews = () => {
     const currentIndexRef = useRef(0);
 
     const [currentIndex, setCurrentIndex] = useState(0);
-    const { ready: bpReady, breakpoint } = useBreakpoint();
-
-   const getSafeTop = () =>
-    breakpoint === "xl" || breakpoint === "2xl" ? SAFE_TOP_BY_BP[breakpoint] : SAFE_TOP_BY_BP.base;
+    const {ready: bpReady, breakpoint} = useBreakpoint();
+    const isShortScreen = typeof window !== "undefined" && window.innerHeight < 800;
+    const getSafeTop = () =>
+        isShortScreen ? SAFE_TOP_BY_BP.base : breakpoint === "xl" || breakpoint === "2xl" ? SAFE_TOP_BY_BP[breakpoint] : SAFE_TOP_BY_BP.base
 
     const getYForIndex = (index: number) => {
         if (index <= 0) return getSafeTop();
@@ -107,11 +108,14 @@ const Reviews = () => {
                     ref={viewportRef}
                     className="grow-1 overflow-hidden relative h-full"
                 >
-                    <div className="absolute z-1 top-0 left-0 w-full h-24 bg-[linear-gradient(to_top,rgba(255,255,255,0)_0%,#ffffff_100%)]" />
-                    <div className="absolute z-1 bottom-0 left-0 w-full h-24 bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,#ffffff_100%)]" />
+                    <div
+                        className="absolute z-1 top-0 left-0 w-full h-24 bg-[linear-gradient(to_top,rgba(255,255,255,0)_0%,#ffffff_100%)]"/>
+                    <div
+                        className="absolute z-1 bottom-0 left-0 w-full h-24 bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_0%,#ffffff_100%)]"/>
 
                     <div className="grid-responsive">
-                        <div className="divider bg-gradation-300 h-[1px] xl:col-start-3 xl:col-span-8 col-span-full relative z-10" />
+                        <div
+                            className="divider bg-gradation-300 h-[1px] xl:col-start-3 xl:col-span-8 col-span-full relative z-10"/>
                     </div>
 
                     <div className="col-span-full grow-1 flex justify-center h-full">
@@ -129,7 +133,7 @@ const Reviews = () => {
                                     <Review
                                         data={review}
                                         selected={currentIndex === i}
-                                        style={{ rotate: review.rotate }}
+                                        style={{rotate: review.rotate}}
                                     />
                                 </div>
                             ))}

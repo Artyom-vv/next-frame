@@ -10,6 +10,7 @@ import {useResponsiveSliderConfig} from "@/hooks/useResponsiveSliderConfig";
 import {PROJECTS_SLIDER_CONFIG} from "@/config/projectsSliderConfig";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import {useBreakpoint} from "@/hooks/useBreakpoint";
+import {useShortScreen} from "@/hooks/useShortScreen";
 
 const Projects = () => {
     const slidesRef = useRef<HTMLDivElement[]>([]);
@@ -17,8 +18,12 @@ const Projects = () => {
     const {sizes, gap, animation, scrollPerStep, ready, breakpoint} =
         useResponsiveSliderConfig(PROJECTS_SLIDER_CONFIG);
 
-    const {isBelow} = useBreakpoint();
-    const isMobile = isBelow("xl");
+    const {isBelow, isAtLeast, ready: bpReady} = useBreakpoint();
+    const { isShortScreen, ready: shortReady } = useShortScreen();
+
+    const isMobile = bpReady && shortReady
+        ? isBelow("xl") || (isAtLeast("xl") && isShortScreen)
+        : false;
 
     const {init, goTo, getSlideWidthByIndex} = useProjectsSliderAnimation({
         sizes,
@@ -33,7 +38,7 @@ const Projects = () => {
         onSlideChange: (i) => {
             goTo(i);
         },
-        enabled: !isMobile
+        enabled: !isMobile && bpReady && shortReady
     });
 
     useGSAP(() => {

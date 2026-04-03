@@ -8,10 +8,11 @@ import {scrollTo} from "@/utils/scrollTo";
 const siteCopyright =
     "© 2026 все права защищены, разработано творческим объединением Atriune";
 
-const footerLinkClass =
-    "text-gradation-100 hover:text-white transition-colors w-fit";
 const metaLinkClass =
     "text-gradation-100 hover:text-white transition-colors underline-offset-4 hover:underline w-fit";
+
+const footerLinkClass = metaLinkClass;
+    // "text-gradation-100 hover:text-white transition-colors w-fit";
 
 const Footer = () => {
     return (

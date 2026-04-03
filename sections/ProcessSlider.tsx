@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect, useRef} from "react";
+import React, {useRef} from "react";
 import {useGSAP} from "@gsap/react";
 import Section from "@/components/layout/Section";
 import {processSteps} from "@/data/processSteps";
@@ -12,6 +12,7 @@ import {PROCESS_SLIDER_CONFIG} from "@/config/processSliderConfig";
 import Button from "@/components/ui/Button";
 import {scrollTo} from "@/utils/scrollTo";
 import {useBreakpoint} from "@/hooks/useBreakpoint";
+import {useShortScreen} from "@/hooks/useShortScreen";
 
 const ProcessSlider = () => {
     const imagesRef = useRef<HTMLImageElement[]>([]);
@@ -20,8 +21,13 @@ const ProcessSlider = () => {
     const {sizes, gap, animation, scrollPerStep, ready, breakpoint} =
         useResponsiveSliderConfig(PROCESS_SLIDER_CONFIG);
 
-    const {isBelow, ready: bpReady} = useBreakpoint();
-    const isMobile = bpReady ? isBelow("xl") : false;
+    const {isBelow, isAtLeast, ready: bpReady} = useBreakpoint();
+    const { isShortScreen, ready: shortReady } = useShortScreen();
+
+    const isMobile = bpReady && shortReady
+        ? isBelow("xl") || (isAtLeast("xl") && isShortScreen)
+        : false;
+    // const isMobile = bpReady ? isBelow("xl") : false;
 
     const {init, goTo} = useSliderAnimation({
         sizes,
@@ -37,7 +43,7 @@ const ProcessSlider = () => {
         onSlideChange: (i) => {
             goTo(i);
         },
-        enabled: !isMobile && bpReady,
+        enabled: !isMobile && bpReady && shortReady,
     });
 
     const isLastStep = !isMobile && currentIndex === processSteps.length - 1;
@@ -76,14 +82,14 @@ const ProcessSlider = () => {
                                     ))}
                                 </SliderTrack>
 
-                                <div className="relative mt-10 [@media(min-height:800px)]:h-[220px]">
+                                <div className="relative mt-10 [@media(min-height:1000px)]:h-[220px]">
                                     {processSteps.map((step, i) => (
                                         <div
                                             key={step.id}
                                             ref={(el) => {
                                                 if (el) textsRef.current[i] = el;
                                             }}
-                                            className="absolute top-0 left-0 flex gap-10 [@media(min-height:800px)]:h-full"
+                                            className="absolute top-0 left-0 flex gap-10 [@media(min-height:1000px)]:h-full"
                                             style={{
                                                 width: sizes.active.w,
                                                 opacity: i === 0 ? 1 : 0,
