@@ -1,6 +1,7 @@
 "use client";
 
 import React, {useRef} from "react";
+import Image from "next/image";
 import Section from "@/components/layout/Section";
 import {usePinnedScroll} from "@/hooks/usePinnedScroll";
 import {useProjectsSliderAnimation} from "@/hooks/useProjectsSliderAnimation";
@@ -98,12 +99,16 @@ const Projects = () => {
                                             </div>
                                         </div>
 
-                                        <img
+                                        <Image
                                             src={step.image}
                                             alt={step.title}
                                             loading="eager"
+                                            priority={i === 0}
                                             fetchPriority={i === 0 ? "high" : "low"}
                                             decoding="async"
+                                            width={sizes.active.w}
+                                            height={sizes.active.h}
+                                            unoptimized
                                             className="object-cover object-center"
                                             style={{
                                                 width: sizes.active.w,
@@ -143,10 +148,13 @@ const Projects = () => {
                                         </div>
                                     </div>
 
-                                    <img
+                                    <Image
                                         src={step.image}
                                         alt={step.title}
                                         loading="lazy"
+                                        width={sizes.inactive.w}
+                                        height={sizes.inactive.h}
+                                        unoptimized
                                         decoding="async"
                                         className={`w-full object-cover object-center ${
                                             isShortDesktop

@@ -2,6 +2,7 @@
 
 import React, {useRef} from "react";
 import {useGSAP} from "@gsap/react";
+import Image from "next/image";
 import Section from "@/components/layout/Section";
 import {processSteps} from "@/data/processSteps";
 import {usePinnedScroll} from "@/hooks/usePinnedScroll";
@@ -70,7 +71,7 @@ const ProcessSlider = () => {
                             <div className="xl:col-start-3 xl:col-span-8">
                                 <SliderTrack height={sizes.active.h}>
                                     {processSteps.map((step, i) => (
-                                        <img
+                                        <Image
                                             key={step.id}
                                             ref={(el) => {
                                                 if (el) imagesRef.current[i] = el;
@@ -78,8 +79,11 @@ const ProcessSlider = () => {
                                             src={step.image}
                                             alt={step.title}
                                             loading="eager"
+                                            priority={i === 0}
                                             fetchPriority={i === 0 ? "high" : "low"}
                                             decoding="async"
+                                            width={sizes.active.w}
+                                            height={sizes.active.h}
                                             className="absolute top-0 left-0 object-cover object-center"
                                         />
                                     ))}
@@ -178,10 +182,12 @@ const ProcessSlider = () => {
                                         </div>
 
                                         {/* Картинка */}
-                                        <img
+                                        <Image
                                             src={step.image}
                                             alt={step.title}
                                             loading="lazy"
+                                            width={sizes.active.w}
+                                            height={sizes.active.h}
                                             decoding="async"
                                             className={`w-full object-cover object-center ${
                                                 isShortDesktop
