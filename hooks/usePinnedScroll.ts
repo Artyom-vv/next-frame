@@ -1,4 +1,4 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useGSAP} from "@gsap/react";
 import gsap from "gsap";
 import {ScrollTrigger} from "gsap/ScrollTrigger";
@@ -21,7 +21,12 @@ export const usePinnedScroll = ({
                                 }: UsePinnedScrollOptions) => {
     const wrapRef = useRef<HTMLDivElement>(null);
     const currentRef = useRef(0);
+    const onSlideChangeRef = useRef(onSlideChange);
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        onSlideChangeRef.current = onSlideChange;
+    }, [onSlideChange]);
 
     useGSAP(
         () => {
@@ -55,17 +60,18 @@ export const usePinnedScroll = ({
                     if (next !== currentRef.current) {
                         currentRef.current = next;
                         setCurrentIndex(next);
-                        onSlideChange(next);
+                        onSlideChangeRef.current(next);
                     }
                 },
             });
             return () => {
                 st.kill();
+                setIsPinned(false);
             };
         },
         {
             scope: wrapRef,
-            dependencies: [count, scrollPerStep, onSlideChange, enabled],
+            dependencies: [count, scrollPerStep, enabled],
         }
     );
 
