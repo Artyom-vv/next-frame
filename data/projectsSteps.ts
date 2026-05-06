@@ -9,7 +9,7 @@ export interface ProjectStep {
 export const projectsSteps: ProjectStep[] = [
     {
         id: 1,
-        duration: "До 7 дней",
+        duration: "6-8 месяцев",
         title: "Дом «Лайнер», Московская область, Глебово",
         description: "200 м²",
         image: "/projects/glebovo.jpeg",
