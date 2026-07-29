@@ -42,14 +42,14 @@ const Footer = () => {
                             <p className="text-m text-gradation-200">Связь в медиа</p>
 
                             <a
-                                href="mailto:hello@atriune.ru"
+                                href="mailto:7981802@mai.ru"
                                 className={metaLinkClass}
                             >
                                 <h2 className="text-inherit">Почта</h2>
                             </a>
 
                             <a
-                                href="https://t.me/atriune"
+                                href="https://t.me/keks2832"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={metaLinkClass}
