@@ -26,6 +26,17 @@ TELEGRAM_CHAT_ID=
 NEXT_PUBLIC_SITE_URL=https://frame-monolit.ru
 ```
 
+When the hosting platform cannot connect to `api.telegram.org`, send messages
+through the Cloudflare Worker relay instead. Add both variables in the hosting
+environment (the secret must match the Worker secret named `RELAY_SECRET`):
+
+```env
+TELEGRAM_RELAY_URL=https://frame-telegram-relay.framesite.workers.dev
+TELEGRAM_RELAY_SECRET=
+```
+
+With the relay configured, `TELEGRAM_BOT_TOKEN` is not used for form delivery.
+
 The API records every accepted request in the application logs and appends it to
 `/tmp/frame-feedback.jsonl` by default. Set `FEEDBACK_STORAGE_PATH` to a mounted
 persistent directory when one is available; the standard App Platform filesystem
