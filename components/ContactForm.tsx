@@ -21,7 +21,7 @@ const ContactForm = () => {
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [errors, setErrors] = useState<FeedbackErrors>({});
-    const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
+    const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'stored' | 'error'>('idle');
 
     const handleSubmit = async () => {
         const normalizedFields = normalizeFeedbackFields({name, phone, email});
@@ -44,7 +44,8 @@ const ContactForm = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(normalizedFields),
             });
-            setStatus(res.ok ? 'done' : 'error');
+            const data = await res.json().catch(() => null) as {delivery?: string} | null;
+            setStatus(res.ok ? (data?.delivery === 'stored' ? 'stored' : 'done') : 'error');
         } catch {
             setStatus('error');
         }
@@ -101,16 +102,21 @@ const ContactForm = () => {
                     inverted
                     className="xl:self-start"
                     onClick={handleSubmit}
-                    disabled={status === 'loading' || status === 'done'}
+                    disabled={status === 'loading' || status === 'done' || status === 'stored'}
                 >
                     {status === 'loading'
                         ? 'Отправка...'
                         : status === 'done'
                             ? 'Заявка отправлена'
+                            : status === 'stored'
+                                ? 'Заявка принята'
                             : 'Отправить заявку'}
                 </Button>
                 {status === 'error' && (
                     <p className="text-m text-red-400">Не удалось отправить заявку. Попробуйте ещё раз.</p>
+                )}
+                {status === 'stored' && (
+                    <p className="text-m text-gradation-200">Заявка сохранена. Мы свяжемся с вами в ближайшее время.</p>
                 )}
                 <p className="text-m text-gradation-300">
                     Нажимая на кнопку &#34;Отправить заявку&#34;, Вы соглашаетесь на обработку персональных данных

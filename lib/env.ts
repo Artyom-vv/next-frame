@@ -11,6 +11,9 @@ const envSchema = z.object({
         .string()
         .min(1, "TELEGRAM_CHAT_ID is required"),
 
+    TELEGRAM_WEBHOOK_SECRET: z.string().min(1).optional(),
+    FEEDBACK_STORAGE_PATH: z.string().min(1).optional(),
+
     // Опционально, если позже захочешь email-канал
     RESEND_API_KEY: z.string().optional(),
     FEEDBACK_TO_EMAIL: z.string().email().optional(),
@@ -20,6 +23,8 @@ const parsed = envSchema.safeParse({
     NODE_ENV: process.env.NODE_ENV,
     TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
     TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
+    TELEGRAM_WEBHOOK_SECRET: process.env.TELEGRAM_WEBHOOK_SECRET,
+    FEEDBACK_STORAGE_PATH: process.env.FEEDBACK_STORAGE_PATH,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     FEEDBACK_TO_EMAIL: process.env.FEEDBACK_TO_EMAIL,
 });

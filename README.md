@@ -16,6 +16,32 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Feedback form and Telegram
+
+The feedback form requires these production variables:
+
+```env
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_CHAT_ID=
+NEXT_PUBLIC_SITE_URL=https://frame-monolit.ru
+```
+
+The API records every accepted request in the application logs and appends it to
+`/tmp/frame-feedback.jsonl` by default. Set `FEEDBACK_STORAGE_PATH` to a mounted
+persistent directory when one is available; the standard App Platform filesystem
+may be cleared during a redeploy.
+
+To make the bot reply to `/start`, create a random `TELEGRAM_WEBHOOK_SECRET`, add
+it to the production variables, then configure the webhook once from a trusted
+machine:
+
+```bash
+TELEGRAM_BOT_TOKEN=... \
+NEXT_PUBLIC_SITE_URL=https://frame-monolit.ru \
+TELEGRAM_WEBHOOK_SECRET=... \
+npm run telegram:webhook
+```
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
