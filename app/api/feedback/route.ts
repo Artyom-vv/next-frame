@@ -7,6 +7,10 @@ import {
     type FeedbackFields,
     validateFeedbackFields,
 } from "@/lib/feedbackValidation";
+import {storeFeedback, storeTelegramDelivery} from "@/lib/feedbackStorage";
+import {sendTelegramMessage} from "@/lib/telegram";
+
+export const runtime = "nodejs";
 
 // ─── Простой rate-limit в памяти (per IP) ────────────────────────────────────
 const rateMap = new Map<string, { count: number; ts: number }>();
@@ -29,19 +33,15 @@ function isRateLimited(ip: string): boolean {
 
 // ─── Telegram уведомление ──────────────────────────────────────────────────────
 async function sendToTelegram(fields: FeedbackFields) {
-    const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
 
-    if (!token || !chatId) return;
+    if (!chatId) {
+        throw new Error("TELEGRAM_CHAT_ID is not configured");
+    }
 
-    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            chat_id: chatId,
-            text: buildFeedbackTelegramMessage(fields),
-            parse_mode: "HTML",
-        }),
+    await sendTelegramMessage({
+        chatId,
+        text: buildFeedbackTelegramMessage(fields),
     });
 }
 
@@ -81,14 +81,42 @@ export async function POST(req: NextRequest) {
     }
 
     const normalizedFields = normalizeFeedbackFields(fields);
+    let feedbackId: string | null = null;
 
-    // Отправка уведомления
     try {
-        await sendToTelegram(normalizedFields);
-    } catch (err) {
-        console.error("Telegram send error:", err);
-        // Не возвращаем ошибку клиенту — логируем и продолжаем
+        feedbackId = await storeFeedback(normalizedFields);
+    } catch (error) {
+        console.error("Feedback storage error:", error);
     }
 
-    return NextResponse.json({ok: true}, {status: 200});
+    try {
+        await sendToTelegram(normalizedFields);
+        if (feedbackId) {
+            await storeTelegramDelivery({id: feedbackId}).catch((storageError) =>
+                console.error("Feedback delivery storage error:", storageError)
+            );
+        }
+        return NextResponse.json({ok: true, delivery: "telegram"}, {status: 200});
+    } catch (error) {
+        console.error("Telegram send error:", error);
+
+        if (feedbackId) {
+            await storeTelegramDelivery({
+                id: feedbackId,
+                error: error instanceof Error ? error.message : "Unknown error",
+            }).catch((storageError) =>
+                console.error("Feedback delivery storage error:", storageError)
+            );
+
+            return NextResponse.json(
+                {ok: true, delivery: "stored"},
+                {status: 202}
+            );
+        }
+
+        return NextResponse.json(
+            {error: "Не удалось принять заявку. Попробуйте ещё раз."},
+            {status: 502}
+        );
+    }
 }
