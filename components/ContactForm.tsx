@@ -102,7 +102,7 @@ const ContactForm = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 xl:h-[116px] xl:justify-between xl:gap-0">
                 <Button
                     inverted
                     className="xl:self-start"

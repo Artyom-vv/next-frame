@@ -59,7 +59,7 @@ const Footer = () => {
                             </a>
                         </div>
 
-                        <div className="flex flex-col gap-6 text-m text-gradation-300">
+                        <div className="flex flex-col gap-6 text-m text-gradation-300 xl:h-[116px] xl:justify-between xl:gap-0">
                             <p>ООО «НПКЕК» ИНН 9726009923</p>
                             <button
                                 type="button"
@@ -110,7 +110,12 @@ const Footer = () => {
                             </a>
                         </div>
 
-                        <p className="text-m text-gradation-300 md:block hidden">
+                        <div className="hidden xl:block xl:h-[116px]">
+                            <p className="text-m text-gradation-300">
+                                {siteCopyright}
+                            </p>
+                        </div>
+                        <p className="text-m text-gradation-300 hidden md:block xl:hidden">
                             {siteCopyright}
                         </p>
                     </div>
