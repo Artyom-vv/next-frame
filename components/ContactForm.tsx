@@ -101,28 +101,6 @@ const ContactForm = () => {
                         {errors.email && <p className="text-m text-red-400 px-4">{errors.email}</p>}
                     </div>
                 </div>
-            </div>
-            <div className="flex flex-col gap-4 xl:h-[116px] xl:justify-between xl:gap-0">
-                <Button
-                    inverted
-                    className="xl:self-start"
-                    onClick={handleSubmit}
-                    disabled={!personalDataConsent || status === 'loading' || status === 'done' || status === 'stored'}
-                >
-                    {status === 'loading'
-                        ? 'Отправка...'
-                        : status === 'done'
-                            ? 'Заявка отправлена'
-                            : status === 'stored'
-                                ? 'Заявка принята'
-                            : 'Отправить заявку'}
-                </Button>
-                {status === 'error' && (
-                    <p className="text-m text-red-400">Не удалось отправить заявку. Попробуйте ещё раз.</p>
-                )}
-                {status === 'stored' && (
-                    <p className="text-m text-gradation-200">Заявка сохранена. Мы свяжемся с вами в ближайшее время.</p>
-                )}
                 <label className="group flex cursor-pointer items-start gap-3 text-m text-gradation-300">
                     <input
                         type="checkbox"
@@ -148,6 +126,28 @@ const ContactForm = () => {
                         Я согласен на обработку персональных данных
                     </span>
                 </label>
+            </div>
+            <div className="flex flex-col gap-4 xl:h-[116px] xl:justify-between xl:gap-0">
+                <Button
+                    inverted
+                    className="xl:self-start"
+                    onClick={handleSubmit}
+                    disabled={!personalDataConsent || status === 'loading' || status === 'done' || status === 'stored'}
+                >
+                    {status === 'loading'
+                        ? 'Отправка...'
+                        : status === 'done'
+                            ? 'Заявка отправлена'
+                            : status === 'stored'
+                                ? 'Заявка принята'
+                            : 'Отправить заявку'}
+                </Button>
+                {status === 'error' && (
+                    <p className="text-m text-red-400">Не удалось отправить заявку. Попробуйте ещё раз.</p>
+                )}
+                {status === 'stored' && (
+                    <p className="text-m text-gradation-200">Заявка сохранена. Мы свяжемся с вами в ближайшее время.</p>
+                )}
             </div>
         </div>
     );
