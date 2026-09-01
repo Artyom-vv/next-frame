@@ -35,6 +35,19 @@ export default function YandexMetrika() {
     const counterId = Number(YANDEX_METRIKA_ID);
     const consent = useCookieConsent();
 
+    useEffect(() => {
+        if (!Number.isFinite(counterId) || consent === "loading") {
+            return;
+        }
+
+        const disableKey = `disableYaCounter${counterId}`;
+        Reflect.set(window, disableKey, consent !== "accepted");
+
+        if (consent === "necessary") {
+            window.ym?.(counterId, "destruct");
+        }
+    }, [consent, counterId]);
+
     if (!Number.isFinite(counterId) || consent !== "accepted") {
         return null;
     }

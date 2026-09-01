@@ -4,6 +4,7 @@ import React from "react";
 import {LogoWithText} from "@/assets/icons";
 import ContactForm from "@/components/ContactForm";
 import {scrollTo} from "@/utils/scrollTo";
+import {openCookieSettings} from "@/hooks/useCookieConsent";
 
 const siteCopyright =
     "© 2026 все права защищены, разработано творческим объединением Atriune";
@@ -60,6 +61,13 @@ const Footer = () => {
 
                         <div className="flex flex-col gap-6 text-m text-gradation-300">
                             <p>ООО «НПКЕК» ИНН 9726009923</p>
+                            <button
+                                type="button"
+                                onClick={openCookieSettings}
+                                className="w-fit cursor-pointer underline underline-offset-4 transition-colors hover:text-gradation-100"
+                            >
+                                Настройки cookie
+                            </button>
                             <p className="md:hidden block">{siteCopyright}</p>
                         </div>
                     </div>

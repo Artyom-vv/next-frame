@@ -4,6 +4,7 @@ import {useSyncExternalStore} from "react";
 
 export const COOKIE_CONSENT_KEY = "next-frame-cookie-consent-v1";
 export const COOKIE_CONSENT_EVENT = "next-frame-cookie-consent-change";
+export const COOKIE_SETTINGS_OPEN_EVENT = "next-frame-cookie-settings-open";
 
 export type CookieConsentValue = "accepted" | "necessary";
 type CookieConsentSnapshot = CookieConsentValue | null | "loading";
@@ -48,6 +49,10 @@ export function setCookieConsent(value: CookieConsentValue) {
     }
 
     window.dispatchEvent(new Event(COOKIE_CONSENT_EVENT));
+}
+
+export function openCookieSettings() {
+    window.dispatchEvent(new Event(COOKIE_SETTINGS_OPEN_EVENT));
 }
 
 export function useCookieConsent() {

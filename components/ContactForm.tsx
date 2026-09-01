@@ -20,10 +20,15 @@ const ContactForm = () => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
+    const [personalDataConsent, setPersonalDataConsent] = useState(false);
     const [errors, setErrors] = useState<FeedbackErrors>({});
     const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'stored' | 'error'>('idle');
 
     const handleSubmit = async () => {
+        if (!personalDataConsent) {
+            return;
+        }
+
         const normalizedFields = normalizeFeedbackFields({name, phone, email});
         const validationErrors = validateFeedbackFields(normalizedFields);
 
@@ -102,7 +107,7 @@ const ContactForm = () => {
                     inverted
                     className="xl:self-start"
                     onClick={handleSubmit}
-                    disabled={status === 'loading' || status === 'done' || status === 'stored'}
+                    disabled={!personalDataConsent || status === 'loading' || status === 'done' || status === 'stored'}
                 >
                     {status === 'loading'
                         ? 'Отправка...'
@@ -118,9 +123,31 @@ const ContactForm = () => {
                 {status === 'stored' && (
                     <p className="text-m text-gradation-200">Заявка сохранена. Мы свяжемся с вами в ближайшее время.</p>
                 )}
-                <p className="text-m text-gradation-300">
-                    Нажимая на кнопку &#34;Отправить заявку&#34;, Вы соглашаетесь на обработку персональных данных
-                </p>
+                <label className="group flex cursor-pointer items-start gap-3 text-m text-gradation-300">
+                    <input
+                        type="checkbox"
+                        checked={personalDataConsent}
+                        onChange={(event) => setPersonalDataConsent(event.target.checked)}
+                        className="peer sr-only"
+                    />
+                    <span
+                        aria-hidden="true"
+                        className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-[5px] border border-gradation-300 transition-colors group-hover:border-gradation-100 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-sandy-orange-200 peer-checked:border-sandy-orange-200 peer-checked:bg-sandy-orange-200 peer-checked:[&>svg]:opacity-100"
+                    >
+                        <svg
+                            viewBox="0 0 12 10"
+                            className="h-2.5 w-3 fill-none stroke-royal-green-800 opacity-0 transition-opacity"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <path d="M1 5 4.25 8 11 1"/>
+                        </svg>
+                    </span>
+                    <span>
+                        Я согласен на обработку персональных данных
+                    </span>
+                </label>
             </div>
         </div>
     );

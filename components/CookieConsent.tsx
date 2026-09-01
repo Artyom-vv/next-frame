@@ -1,7 +1,9 @@
 "use client";
 
+import {useEffect, useState} from "react";
 import Button from "@/components/ui/Button";
 import {
+    COOKIE_SETTINGS_OPEN_EVENT,
     setCookieConsent,
     useCookieConsent,
     type CookieConsentValue,
@@ -9,12 +11,25 @@ import {
 
 export default function CookieConsent() {
     const consent = useCookieConsent();
+    const [areSettingsOpen, setAreSettingsOpen] = useState(false);
+
+    useEffect(() => {
+        const openSettings = () => setAreSettingsOpen(true);
+        window.addEventListener(COOKIE_SETTINGS_OPEN_EVENT, openSettings);
+        return () => window.removeEventListener(COOKIE_SETTINGS_OPEN_EVENT, openSettings);
+    }, []);
 
     const saveConsent = (value: CookieConsentValue) => {
+        const shouldReload = consent !== null && consent !== "loading" && consent !== value;
         setCookieConsent(value);
+        setAreSettingsOpen(false);
+
+        if (shouldReload) {
+            window.location.reload();
+        }
     };
 
-    if (consent !== null) {
+    if (consent !== null && !areSettingsOpen) {
         return null;
     }
 
