@@ -6,6 +6,7 @@ import React from "react";
 import LenisProvider from "@/components/providers/LenisProvider";
 import Footer from "@/components/layout/Footer";
 import YandexMetrika from "@/components/providers/YandexMetrika";
+import CookieConsent from "@/components/CookieConsent";
 import {siteDescription, siteKeywords, siteName, siteOgImage, siteTitle, siteUrl} from "@/config/site";
 
 const montserrat = Montserrat({
@@ -117,6 +118,7 @@ export default function RootLayout({
             </LenisProvider>
             <Footer/>
         </div>
+        <CookieConsent/>
         <YandexMetrika/>
         </body>
         </html>

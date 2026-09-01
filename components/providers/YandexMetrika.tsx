@@ -3,6 +3,7 @@
 import Script from "next/script";
 import {Suspense, useEffect, useRef} from "react";
 import {usePathname, useSearchParams} from "next/navigation";
+import {useCookieConsent} from "@/hooks/useCookieConsent";
 
 const YANDEX_METRIKA_ID = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID || "109883292";
 
@@ -32,8 +33,9 @@ function YandexMetrikaPageView({counterId}: { counterId: number }) {
 
 export default function YandexMetrika() {
     const counterId = Number(YANDEX_METRIKA_ID);
+    const consent = useCookieConsent();
 
-    if (!Number.isFinite(counterId)) {
+    if (!Number.isFinite(counterId) || consent !== "accepted") {
         return null;
     }
 
